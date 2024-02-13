@@ -39,5 +39,30 @@ router.get('/students', async (req, res) => {
     }
   });
 
+  router.delete('/students/:id', async (req, res) => {
+    try {
+      const deletedStudent = await Student.findOneAndDelete({ _id: req.params.id });
+      if (!deletedStudent) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+      res.json({ message: 'Student deleted' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  router.put('/students/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, gender, dept, email, college, cgpa } = req.body;
+      await Student.findByIdAndUpdate(id, { name, gender, dept, email, college, cgpa });
+      res.json({ message: 'Student updated successfully' });
+    } catch (error) {
+      console.error('Error updating student:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
+  
 
 module.exports=router;

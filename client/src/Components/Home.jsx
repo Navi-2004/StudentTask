@@ -52,6 +52,16 @@ const Home = () => {
           console.error('Error submitting form:', error);
         }
       };
+      const handleDelete = async (index) => {
+        try {
+          await axios.delete(`/students/${students[index]._id}`);
+          const updatedStudentsResponse = await axios.get('/students');
+          setStudents(updatedStudentsResponse.data);
+        } catch (error) {
+          console.error('Error deleting student:', error);
+        }
+      };
+
   return (
     <div>
     <div className="home-container">
@@ -129,7 +139,7 @@ const Home = () => {
       </div>
       </div>
       <div>
-        <StudentTable students={students}/>
+        <StudentTable students={students} onDelete={handleDelete}/>
       
     </div>
     </div>
